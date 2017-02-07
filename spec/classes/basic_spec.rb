@@ -83,6 +83,26 @@ describe 'varnish' do
 
     end
 
+    describe "varnish class with minimal parameters on Ubuntu 16.04" do
+      let(:params) {{
+        :secret => 'foobar'
+      }}
+      let (:facts) {{
+        :osfamily        => 'Debian',
+        # apt looks for lsbdistid
+        :lsbdistid       => 'Debian',
+        :lsbdistcodename => 'xenial',
+        :puppetversion   => Puppet.version
+      }}
+
+      it { should compile.with_all_deps }
+      it { should contain_class('varnish::secret') }
+      it { should contain_class('varnish::install').that_comes_before('Class[varnish::config]') }
+      it { should contain_class('varnish::config') }
+      it { should contain_class('varnish::service').that_subscribes_to('Class[varnish::config]') }
+
+    end
+
     describe "varnish class with minimal parameters on Debian 7" do
       let(:params) {{
         :secret => 'foobar'
@@ -185,6 +205,23 @@ describe 'varnish' do
           :osfamily        => 'Debian',
           :lsbdistid       => 'Debian',
           :lsbdistcodename => 'trusty',
+          :puppetversion   => Puppet.version
+        }}
+
+      it { should compile.with_all_deps }
+      it { should contain_apt__source('varnish-cache').with(:repos => 'varnish-4.0',
+        :location => 'http://repo.varnish-cache.org/debian') }
+    end
+
+  end  context 'Varnish 4 on Ubuntu 16' do
+    describe 'Varnish 4 on Ubuntu 16.04' do
+      let(:params) {{
+          :varnish_version => '4.0'
+        }}
+        let (:facts) {{
+          :osfamily        => 'Debian',
+          :lsbdistid       => 'Debian',
+          :lsbdistcodename => 'xenial',
           :puppetversion   => Puppet.version
         }}
 

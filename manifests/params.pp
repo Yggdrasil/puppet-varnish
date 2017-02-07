@@ -53,6 +53,14 @@ class varnish::params {
           $vcl_reload         = '/usr/share/varnish/reload-vcl'
 
         }
+        'xenial': {
+          $addrepo            = true
+          $repoclass          = 'varnish::repo::debian'
+          $sysconfig          = '/etc/default/varnish'
+          $varnish_version    = '4.0'
+          $vcl_reload         = '/usr/share/varnish/reload-vcl'
+
+        }
         'wheezy': {
           $addrepo            = true
           $repoclass          = 'varnish::repo::debian'
