@@ -37,45 +37,54 @@ class varnish::params {
       }
     }
     'Debian': {
-      case $::lsbdistcodename {
-        'precise': {
-          $addrepo            = false
-          $sysconfig          = '/etc/default/varnish'
-          $varnish_version    = '3.0'
-          $vcl_reload         = '/usr/share/varnish/reload-vcl'
-
+      case $::operatingsystem {
+        'Ubuntu': {
+          case $::lsbdistcodename {
+            'precise': {
+              $addrepo            = false
+              $sysconfig          = '/etc/default/varnish'
+              $varnish_version    = '3.0'
+              $vcl_reload         = '/usr/share/varnish/reload-vcl'
+            }
+            'trusty': {
+              $addrepo            = true
+              $repoclass          = 'varnish::repo::debian'
+              $sysconfig          = '/etc/default/varnish'
+              $varnish_version    = '4.0'
+              $vcl_reload         = '/usr/share/varnish/reload-vcl'
+            }
+            'xenial': {
+              $addrepo            = true
+              $repoclass          = 'varnish::repo::debian'
+              $sysconfig          = '/etc/default/varnish'
+              $varnish_version    = '4.0'
+              $vcl_reload         = '/usr/share/varnish/reload-vcl'
+            }
+            default: {
+              fail("${::operatingsystem} (${::lsbdistdescription}, ${::lsbdistcodename}) not supported")
+            }
+          }
         }
-        'trusty': {
-          $addrepo            = true
-          $repoclass          = 'varnish::repo::debian'
-          $sysconfig          = '/etc/default/varnish'
-          $varnish_version    = '4.0'
-          $vcl_reload         = '/usr/share/varnish/reload-vcl'
-
-        }
-        'xenial': {
-          $addrepo            = true
-          $repoclass          = 'varnish::repo::debian'
-          $sysconfig          = '/etc/default/varnish'
-          $varnish_version    = '4.0'
-          $vcl_reload         = '/usr/share/varnish/reload-vcl'
-
-        }
-        'wheezy': {
-          $addrepo            = true
-          $repoclass          = 'varnish::repo::debian'
-          $sysconfig          = '/etc/default/varnish'
-          $varnish_version    = '3.0'
-          $vcl_reload         = '/usr/share/varnish/reload-vcl'
-
-        }
-        'jessie': {
-          $addrepo            = true
-          $repoclass          = 'varnish::repo::debian'
-          $sysconfig          = '/etc/default/varnish'
-          $varnish_version    = '4.0'
-          $vcl_reload         = '/usr/share/varnish/reload-vcl'
-
+        'Debian': {
+          case $::lsbdistcodename {
+            'wheezy': {
+              $addrepo            = true
+              $repoclass          = 'varnish::repo::debian'
+              $sysconfig          = '/etc/default/varnish'
+              $varnish_version    = '3.0'
+              $vcl_reload         = '/usr/share/varnish/reload-vcl'
+            }
+            'jessie': {
+              $addrepo            = true
+              $repoclass          = 'varnish::repo::debian'
+              $sysconfig          = '/etc/default/varnish'
+              $varnish_version    = '4.0'
+              $vcl_reload         = '/usr/share/varnish/reload-vcl'
+            }
+            default: {
+              fail("${::operatingsystem} (${::lsbdistdescription}, ${::lsbdistcodename}) not supported")
+            }
+          }
         }
         default: {
           fail("${::operatingsystem} (${::lsbdistdescription}, ${::lsbdistcodename}) not supported")
